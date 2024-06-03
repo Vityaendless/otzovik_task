@@ -1,4 +1,4 @@
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, DetailView
 from django.db.models import Q
 from django.utils.http import urlencode
 
@@ -59,3 +59,8 @@ class ProductCreateView(CreateView):
         )
         self.product = form.save()
         return super().form_valid(form)
+
+
+class ProductView(DetailView):
+    model = Product
+    template_name = 'products/product_details.html'
