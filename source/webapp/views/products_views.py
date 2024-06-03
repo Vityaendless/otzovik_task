@@ -1,9 +1,9 @@
-from django.views.generic import ListView
+from django.views.generic import ListView, CreateView
 from django.db.models import Q
 from django.utils.http import urlencode
 
 from ..models import Product
-from ..forms import SimpleSearchForm
+from ..forms import SimpleSearchForm, ProductForm
 
 
 class IndexView(ListView):
@@ -43,3 +43,19 @@ class IndexView(ListView):
             context['query'] = urlencode({'search': self.search_value})
             context['search_value'] = self.search_value
         return context
+
+
+class ProductCreateView(CreateView):
+    template_name = 'products/product_create.html'
+    model = Product
+    form_class = ProductForm
+
+    def form_valid(self, form):
+        self.product = Product.objects.create(
+            title=form.cleaned_data.get('title'),
+            category=form.cleaned_data.get('category'),
+            description=form.cleaned_data.get('description'),
+            img=form.cleaned_data.get('img'),
+        )
+        self.product = form.save()
+        return super().form_valid(form)
