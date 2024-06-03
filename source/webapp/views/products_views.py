@@ -1,6 +1,7 @@
-from django.views.generic import ListView, CreateView, DetailView
+from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 from django.db.models import Q
 from django.utils.http import urlencode
+from django.urls import reverse_lazy
 
 from ..models import Product
 from ..forms import SimpleSearchForm, ProductForm
@@ -50,17 +51,19 @@ class ProductCreateView(CreateView):
     model = Product
     form_class = ProductForm
 
-    def form_valid(self, form):
-        self.product = Product.objects.create(
-            title=form.cleaned_data.get('title'),
-            category=form.cleaned_data.get('category'),
-            description=form.cleaned_data.get('description'),
-            img=form.cleaned_data.get('img'),
-        )
-        self.product = form.save()
-        return super().form_valid(form)
-
 
 class ProductView(DetailView):
     model = Product
     template_name = 'products/product_details.html'
+
+
+class ProductUpdateView(UpdateView):
+    template_name = 'products/product_update.html'
+    model = Product
+    form_class = ProductForm
+
+
+class ProductDeleteView(DeleteView):
+    template_name = 'products/product_delete.html'
+    model = Product
+    success_url = reverse_lazy('webapp:index')

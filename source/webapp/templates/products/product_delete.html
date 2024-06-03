@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Delete Product{% endblock %}
+{% block content %}
+    <h1>Delete Product</h1>
+    <h3>Do you approve removing {{ product.title }}?</h3>
+    <form action="" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Yes"/>
+    </form>
+    <a href="{% url 'webapp:product_view' pk=product.pk %}">No</a>
+{% endblock %}

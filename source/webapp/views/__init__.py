@@ -1,1 +1,1 @@
-from .products_views import IndexView, ProductCreateView, ProductView
+from .products_views import IndexView, ProductCreateView, ProductView, ProductUpdateView, ProductDeleteView
