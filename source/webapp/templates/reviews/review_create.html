@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}New Review{% endblock %}
+{% block content %}
+<h1>Create Review</h1>
+{% include 'partial/form.html' with value_submit='Create review' form_method='post' %}
+{% endblock %}
