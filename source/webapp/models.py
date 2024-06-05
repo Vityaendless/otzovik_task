@@ -27,6 +27,7 @@ class Product(AbstractModel):
     category = models.CharField(max_length=30, null=False, blank=False, verbose_name='Category', choices=categories)
     description = models.TextField(max_length=500, null=True, blank=True, verbose_name="Description")
     img = models.ImageField(upload_to='publications_images', null=True, blank=True, verbose_name='Avatar')
+    avg_grade = models.FloatField(default=0, verbose_name='Avg grade')
 
     def __str__(self):
         return self.title

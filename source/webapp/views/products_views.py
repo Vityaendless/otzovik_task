@@ -2,9 +2,11 @@ from django.views.generic import ListView, CreateView, DetailView, UpdateView, D
 from django.db.models import Q
 from django.utils.http import urlencode
 from django.urls import reverse_lazy
+from django.shortcuts import get_object_or_404
 
 from ..models import Product
 from ..forms import SimpleSearchForm, ProductForm
+from ..helpers import Helper
 
 
 class IndexView(ListView):
@@ -55,6 +57,14 @@ class ProductCreateView(CreateView):
 class ProductView(DetailView):
     model = Product
     template_name = 'products/product_details.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        product = get_object_or_404(Product, pk=self.kwargs.get('pk'))
+        reviews_count = product.reviews.count()
+        if reviews_count >= 1:
+            product.avg_grade = Helper.get_avg(product.reviews.all(), reviews_count)
+            product.save()
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
