@@ -63,12 +63,15 @@ class ProductView(DetailView):
         reviews_count = product.reviews.count()
         if reviews_count >= 1:
             product.avg_grade = Helper.get_avg(product.reviews.all(), reviews_count)
-            product.save()
+        else:
+            product.avg_grade = 0
+        product.save()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['reviews'] = self.object.reviews.all()
+        context['stars'] = [1, 1, 1, 1, 1]
         return context
 
 
