@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, reverse
-from django.views.generic import CreateView, DetailView
+from django.views.generic import CreateView, DetailView, UpdateView
 from django.contrib.auth import get_user_model, login
 
-from .forms import MyUserCreationForm
+from .forms import MyUserCreationForm, UserChangeForm
 from webapp.helpers import Helper
 
 
@@ -30,3 +30,13 @@ class UserDetailView(DetailView):
         context['reviews'] = self.get_object().reviews.all()
         context['stars'] = Helper.stars
         return context
+
+
+class UserEditView(UpdateView):
+    model = get_user_model()
+    form_class = UserChangeForm
+    template_name = 'user_change.html'
+    context_object_name = 'user_obj'
+
+    def get_success_url(self):
+        return reverse('accounts:user_details', kwargs={'pk': self.object.pk})

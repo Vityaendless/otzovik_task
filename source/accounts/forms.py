@@ -1,5 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+from django import forms
 
 
 class MyUserCreationForm(UserCreationForm):
@@ -11,3 +13,9 @@ class MyUserCreationForm(UserCreationForm):
         if email == "":
             raise ValidationError('Email is required')
         return email
+
+
+class UserChangeForm(forms.ModelForm):
+    class Meta:
+        model = get_user_model()
+        fields = ['first_name', 'last_name', 'email']

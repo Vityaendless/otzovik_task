@@ -4,7 +4,7 @@
 <ul class="list-group">
     {% for review in reviews %}
         <li class="list-group-item mb-1">
-            <h5 class="card-title">Author: {{ review.author }}, {{ review.author.email }}</h5>
+            <h5 class="card-title">Author: <a href="{% url 'accounts:user_details' pk=review.author.pk %}" >{{ review.author }}</a>, {{ review.author.email }}</h5>
             <div class="rating-result">
                 {% for star in stars %}
                     <span {% if review.grade >= forloop.counter %}class="active"{% endif %}></span>
