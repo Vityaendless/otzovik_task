@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Registration{% endblock %}
+{% block content %}
+<h1>Registration</h1>
+{% include 'partial/form.html' with value_submit='Registration' form_method='post' %}
+{% endblock %}
