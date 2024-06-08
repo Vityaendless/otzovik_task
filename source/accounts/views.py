@@ -1,6 +1,8 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import redirect, reverse
 from django.views.generic import CreateView, DetailView, UpdateView
+from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth import get_user_model, login
+from django.contrib.auth.mixins import UserPassesTestMixin
 
 from .forms import MyUserCreationForm, UserChangeForm
 from webapp.helpers import Helper
@@ -40,3 +42,13 @@ class UserEditView(UpdateView):
 
     def get_success_url(self):
         return reverse('accounts:user_details', kwargs={'pk': self.object.pk})
+
+
+class UserPasswordChangeView(UserPassesTestMixin, PasswordChangeView):
+    template_name = 'user_password_change.html'
+
+    def test_func(self):
+        return self.request.user.pk == self.kwargs.get('pk')
+
+    def get_success_url(self):
+        return reverse('accounts:user_details', kwargs={'pk': self.request.user.pk})
