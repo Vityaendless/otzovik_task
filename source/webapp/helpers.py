@@ -5,3 +5,5 @@ class Helper:
         for item in data:
             total += item.grade
         return total / length
+
+    stars = [1, 1, 1, 1, 1]

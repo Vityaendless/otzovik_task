@@ -1,0 +1,27 @@
+{% if is_paginated %}
+    {% include 'partial/pagination.html' %}
+{% endif %}
+<ul class="list-group">
+    {% for review in reviews %}
+        <li class="list-group-item mb-1">
+            <h5 class="card-title">Author: {{ review.author }}, {{ review.author.email }}</h5>
+            <div class="rating-result">
+                {% for star in stars %}
+                    <span {% if review.grade >= forloop.counter %}class="active"{% endif %}></span>
+                {% endfor %}
+                </div>
+            <p class="card-text">Grade: {{ review.grade }}</p>
+            <p class="card-text">{{ review.text }}</p>
+            <p>
+                <a href="{% url 'webapp:review_update' pk=review.pk %}" class="link-success link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
+                    Edit review
+                </a>
+            </p>
+            <p>
+                <a href="{% url 'webapp:review_delete' pk=review.pk %}" class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
+                    Delete review
+                </a>
+            </p>
+        </li>
+    {% endfor %}
+</ul>
