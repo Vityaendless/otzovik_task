@@ -12,16 +12,20 @@
                 </div>
             <p class="card-text">Grade: {{ review.grade }}</p>
             <p class="card-text">{{ review.text }}</p>
-            <p>
-                <a href="{% url 'webapp:review_update' pk=review.pk %}" class="link-success link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
-                    Edit review
-                </a>
-            </p>
-            <p>
-                <a href="{% url 'webapp:review_delete' pk=review.pk %}" class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
-                    Delete review
-                </a>
-            </p>
+            {% if perms.webapp.change_review or request.user == review.author %}
+                <p>
+                    <a href="{% url 'webapp:review_update' pk=review.pk %}" class="link-success link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
+                        Edit review
+                    </a>
+                </p>
+            {% endif %}
+            {% if perms.webapp.delete_review or request.user == review.author %}
+                <p>
+                    <a href="{% url 'webapp:review_delete' pk=review.pk %}" class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
+                        Delete review
+                    </a>
+                </p>
+            {% endif %}
         </li>
     {% endfor %}
 </ul>

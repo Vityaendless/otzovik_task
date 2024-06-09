@@ -1,5 +1,6 @@
 from django.views.generic import CreateView, UpdateView, DeleteView
 from django.shortcuts import get_object_or_404, redirect, reverse
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 from ..models import Review, Product
 from ..forms import ReviewForm
@@ -19,17 +20,31 @@ class ReviewCreateView(CreateView):
         return redirect('webapp:product_view', pk=product.pk)
 
 
-class ReviewUpdateView(UpdateView):
+class ReviewUpdateView(PermissionRequiredMixin, UpdateView):
     template_name = 'reviews/review_update.html'
     model = Review
     form_class = ReviewForm
+    permission_required = 'webapp.change_review'
+
+    def has_permission(self):
+        return super().has_permission() or self.request.user == self.get_object().author
+
+    def handle_no_permission(self):
+        return redirect('webapp:403')
 
     def get_success_url(self):
         return reverse('webapp:product_view', kwargs={'pk': self.object.product.pk})
 
 
-class ReviewDeleteView(DeleteView):
+class ReviewDeleteView(PermissionRequiredMixin, DeleteView):
     model = Review
+    permission_required = 'webapp.delete_review'
+
+    def has_permission(self):
+        return super().has_permission() or self.request.user == self.get_object().author
+
+    def handle_no_permission(self):
+        return redirect('webapp:403')
 
     def get(self, request, *args, **kwargs):
         return self.delete(request, *args, **kwargs)
