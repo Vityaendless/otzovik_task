@@ -32,6 +32,13 @@ class ReviewUpdateView(PermissionRequiredMixin, UpdateView):
     form_class = ReviewForm
     permission_required = 'webapp.change_review'
 
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        if self.request.user == self.get_object().author:
+            self.object.status = 1
+        self.object.save()
+        return redirect(self.get_success_url())
+
     def has_permission(self):
         return super().has_permission() or self.request.user == self.get_object().author
 

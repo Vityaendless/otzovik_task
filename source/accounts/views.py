@@ -31,7 +31,7 @@ class UserDetailView(DetailView):
     paginate_related_orphans = 0
 
     def get_context_data(self, **kwargs):
-        reviews = self.object.reviews.all()
+        reviews = self.object.reviews.filter(status=2)
         paginator = Paginator(reviews, self.paginate_related_by, orphans=self.paginate_related_orphans)
         page_number = self.request.GET.get('page', 1)
         page = paginator.get_page(page_number)
