@@ -72,7 +72,8 @@ class NoModerateReviewsView(PermissionRequiredMixin, ListView):
     def get_queryset(self):
         return Review.objects.filter(status=1).order_by('-created_at')
 
-class ReviewAcceptView(View):
+
+class ReviewAcceptView(PermissionRequiredMixin, View):
     permission_required = 'webapp.accept_review'
 
     def handle_no_permission(self):
@@ -81,5 +82,18 @@ class ReviewAcceptView(View):
     def get(self, request, *args, **kwargs):
         review = get_object_or_404(Review, pk=kwargs.get('pk'))
         review.status = 2
+        review.save()
+        return redirect('webapp:no_moderate_list')
+
+
+class ReviewDeclineView(PermissionRequiredMixin, View):
+    permission_required = 'webapp.decline_review'
+
+    def handle_no_permission(self):
+        return redirect('webapp:403')
+
+    def get(self, request, *args, **kwargs):
+        review = get_object_or_404(Review, pk=kwargs.get('pk'))
+        review.status = 3
         review.save()
         return redirect('webapp:no_moderate_list')

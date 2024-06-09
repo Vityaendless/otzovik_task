@@ -40,6 +40,13 @@
                     </a>
                 </p>
             {% endif %}
+            {% if decline_link %}
+                <p>
+                    <a href="{% url 'webapp:decline_review' pk=review.pk %}" class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
+                        Decline review
+                    </a>
+                </p>
+            {% endif %}
         </li>
     {% endfor %}
 </ul>

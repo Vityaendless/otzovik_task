@@ -2,7 +2,7 @@ from django.urls import path
 
 from .views import (IndexView, ProductCreateView, ProductView, ProductUpdateView, ProductDeleteView,
                     ReviewCreateView, ReviewUpdateView, ReviewDeleteView, permission_denied,
-                    NoModerateReviewsView, ReviewAcceptView)
+                    NoModerateReviewsView, ReviewAcceptView, ReviewDeclineView)
 
 
 app_name = 'webapp'
@@ -18,5 +18,6 @@ urlpatterns = [
     path('review/<int:pk>/delete/', ReviewDeleteView.as_view(), name='review_delete'),
     path('review/no_moderate/', NoModerateReviewsView.as_view(), name='no_moderate_list'),
     path('review/<int:pk>/accept/', ReviewAcceptView.as_view(), name='accept_review'),
+    path('review/<int:pk>/decline/', ReviewDeclineView.as_view(), name='decline_review'),
     path('403/', permission_denied, name='403'),
 ]
