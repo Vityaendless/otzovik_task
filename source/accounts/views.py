@@ -3,6 +3,7 @@ from django.views.generic import CreateView, DetailView, UpdateView
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth import get_user_model, login
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.core.paginator import Paginator
 
 from .forms import MyUserCreationForm, UserChangeForm
 from webapp.helpers import Helper
@@ -26,12 +27,19 @@ class UserDetailView(DetailView):
     model = get_user_model()
     template_name = 'user_detail.html'
     context_object_name = 'user_obj'
+    paginate_related_by = 5
+    paginate_related_orphans = 0
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['reviews'] = self.get_object().reviews.all()
-        context['stars'] = Helper.stars
-        return context
+        reviews = self.object.reviews.all()
+        paginator = Paginator(reviews, self.paginate_related_by, orphans=self.paginate_related_orphans)
+        page_number = self.request.GET.get('page', 1)
+        page = paginator.get_page(page_number)
+        kwargs['page_obj'] = page
+        kwargs['reviews'] = page.object_list
+        kwargs['is_paginated'] = page.has_other_pages()
+        kwargs['stars'] = Helper.stars
+        return super().get_context_data(**kwargs)
 
 
 class UserEditView(UpdateView):

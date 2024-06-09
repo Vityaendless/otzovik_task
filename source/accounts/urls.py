@@ -14,5 +14,3 @@ urlpatterns = [
     path('user/<int:pk>/edit/', UserEditView.as_view(), name='edit_user'),
     path('user/<int:pk>/password_change/', UserPasswordChangeView.as_view(), name='user_password_change'),
 ]
-
-#пагинация для отзывов

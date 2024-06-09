@@ -3,6 +3,7 @@ from django.db.models import Q
 from django.utils.http import urlencode
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
+from django.core.paginator import Paginator
 
 from ..models import Product
 from ..forms import SimpleSearchForm, ProductForm
@@ -57,6 +58,8 @@ class ProductCreateView(CreateView):
 class ProductView(DetailView):
     model = Product
     template_name = 'products/product_details.html'
+    paginate_related_by = 5
+    paginate_related_orphans = 0
 
     def dispatch(self, request, *args, **kwargs):
         product = get_object_or_404(Product, pk=self.kwargs.get('pk'))
@@ -69,10 +72,15 @@ class ProductView(DetailView):
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['reviews'] = self.object.reviews.all()
-        context['stars'] = Helper.stars
-        return context
+        reviews = self.object.reviews.all()
+        paginator = Paginator(reviews, self.paginate_related_by, orphans=self.paginate_related_orphans)
+        page_number = self.request.GET.get('page', 1)
+        page = paginator.get_page(page_number)
+        kwargs['page_obj'] = page
+        kwargs['reviews'] = page.object_list
+        kwargs['is_paginated'] = page.has_other_pages()
+        kwargs['stars'] = Helper.stars
+        return super().get_context_data(**kwargs)
 
 
 class ProductUpdateView(UpdateView):
