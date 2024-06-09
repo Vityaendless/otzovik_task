@@ -42,11 +42,17 @@ class UserDetailView(DetailView):
         return super().get_context_data(**kwargs)
 
 
-class UserEditView(UpdateView):
+class UserEditView(UserPassesTestMixin, UpdateView):
     model = get_user_model()
     form_class = UserChangeForm
     template_name = 'user_change.html'
     context_object_name = 'user_obj'
+
+    def test_func(self):
+        return self.request.user.pk == self.kwargs.get('pk')
+
+    def handle_no_permission(self):
+        return redirect('webapp:403')
 
     def get_success_url(self):
         return reverse('accounts:user_details', kwargs={'pk': self.object.pk})
@@ -57,6 +63,9 @@ class UserPasswordChangeView(UserPassesTestMixin, PasswordChangeView):
 
     def test_func(self):
         return self.request.user.pk == self.kwargs.get('pk')
+
+    def handle_no_permission(self):
+        return redirect('webapp:403')
 
     def get_success_url(self):
         return reverse('accounts:user_details', kwargs={'pk': self.request.user.pk})

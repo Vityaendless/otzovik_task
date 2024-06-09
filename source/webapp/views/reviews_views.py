@@ -12,6 +12,11 @@ class ReviewCreateView(CreateView):
     model = Review
     form_class = ReviewForm
 
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('accounts:login')
+        return super().dispatch(request, *args, **kwargs)
+
     def form_valid(self, form):
         product = get_object_or_404(Product, pk=self.kwargs.get('pk'))
         review = form.save(commit=False)

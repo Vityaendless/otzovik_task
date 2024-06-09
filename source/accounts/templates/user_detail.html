@@ -11,8 +11,10 @@
             <h1>Personal page: {{ user_obj.get_full_name|default:user_obj.username }}</h1>
             <h5 class="card-title">{{ user_obj.username }}</h5>
             <p class="card-text">{{ user_obj.first_name }} {{ user_obj.last_name }} - {{ user_obj.email }}</p>
-            <a href="{% url 'accounts:edit_user' user_obj.pk %}" >Edit user</a><br>
-            <a href="{% url 'accounts:user_password_change' user_obj.pk %}" >Change password</a>
+            {% if request.user.pk == user_obj.pk %}
+                <a href="{% url 'accounts:edit_user' user_obj.pk %}" >Edit user</a><br>
+                <a href="{% url 'accounts:user_password_change' user_obj.pk %}" >Change password</a>
+            {% endif %}
         </div>
     </div>
     {% include 'partial/reviews_list.html' with link_to_product=True %}
