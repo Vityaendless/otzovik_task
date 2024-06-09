@@ -15,6 +15,6 @@
             <a href="{% url 'accounts:user_password_change' user_obj.pk %}" >Change password</a>
         </div>
     </div>
-    {% include 'partial/reviews_list.html' %}
+    {% include 'partial/reviews_list.html' with link_to_product=True %}
 {% endif %}
 {% endblock %}
