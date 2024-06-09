@@ -88,13 +88,21 @@ class ProductView(DetailView):
         return super().get_context_data(**kwargs)
 
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(PermissionRequiredMixin, UpdateView):
     template_name = 'products/product_update.html'
     model = Product
     form_class = ProductForm
+    permission_required = 'webapp.change_product'
+
+    def handle_no_permission(self):
+        return redirect('webapp:403')
 
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(PermissionRequiredMixin, DeleteView):
     template_name = 'products/product_delete.html'
     model = Product
     success_url = reverse_lazy('webapp:index')
+    permission_required = 'webapp.delete_product'
+
+    def handle_no_permission(self):
+        return redirect('webapp:403')

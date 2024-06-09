@@ -1,3 +1,5 @@
-<a class="nav-link" href="{% url 'webapp:product_update_view' pk=product.pk %}">Update product</a>
-<a class="nav-link" href="{% url 'webapp:product_delete_view' pk=product.pk %}">Delete product</a>
+{% if perms.webapp.add_product %}
+    <a class="nav-link" href="{% url 'webapp:product_update_view' pk=product.pk %}">Update product</a>
+    <a class="nav-link" href="{% url 'webapp:product_delete_view' pk=product.pk %}">Delete product</a>
+{% endif %}
 <a class="nav-link" href="{% url 'webapp:review_create' pk=product.pk %}">New Review</a>
