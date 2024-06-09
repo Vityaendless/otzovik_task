@@ -1,9 +1,10 @@
-from django.views.generic import CreateView, UpdateView, DeleteView
+from django.views.generic import CreateView, UpdateView, DeleteView, ListView
 from django.shortcuts import get_object_or_404, redirect, reverse
 from django.contrib.auth.mixins import PermissionRequiredMixin
 
 from ..models import Review, Product
 from ..forms import ReviewForm
+from ..helpers import Helper
 
 
 class ReviewCreateView(CreateView):
@@ -51,3 +52,22 @@ class ReviewDeleteView(PermissionRequiredMixin, DeleteView):
 
     def get_success_url(self):
         return reverse('webapp:product_view', kwargs={'pk': self.object.product.pk})
+
+
+class NoModerateReviewsView(PermissionRequiredMixin, ListView):
+    model = Review
+    template_name = 'reviews/no_moderate_list.html'
+    context_object_name = 'reviews'
+    paginate_by = 10
+    paginate_orphans = 1
+    ordering = ('-created_at',)
+    permission_required = 'webapp.see_no_moderate_reviews'
+
+    def handle_no_permission(self):
+        return redirect('webapp:403')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['stars'] = Helper.stars
+        return context
+

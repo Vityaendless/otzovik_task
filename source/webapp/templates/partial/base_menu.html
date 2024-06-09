@@ -11,3 +11,6 @@
 {% if perms.webapp.add_product %}
     <a class="nav-link" href="{% url 'webapp:product_create' %}">New Product</a>
 {% endif %}
+{% if perms.webapp.see_no_moderate_reviews %}
+    <a class="nav-link" href="{% url 'webapp:no_moderate_list' %}">No moderate list</a>
+{% endif %}

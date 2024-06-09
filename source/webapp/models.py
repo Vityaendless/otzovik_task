@@ -48,5 +48,12 @@ class Review(AbstractModel):
     grade = IntegerRangeField(min_value=1, max_value=5, null=False, blank=False, verbose_name='Grade')
     status = models.CharField(max_length=30, default=1, verbose_name='Status', choices=moderate_statuses)
 
+    class Meta:
+        permissions = [
+            ('see_no_moderate_reviews', 'Can see no moderates reviews'),
+            ('accept_review', 'Can accept review'),
+            ('decline_review', 'Can decline review')
+        ]
+
     def __str__(self):
         return f'{self.pk} review'

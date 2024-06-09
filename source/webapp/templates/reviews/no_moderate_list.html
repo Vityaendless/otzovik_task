@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}No moderate reviews list{% endblock %}
+{% block content %}
+    <h1>No moderate reviews list</h1>
+    {% include 'partial/reviews_list.html' with link_to_product=True %}
+{% endblock %}

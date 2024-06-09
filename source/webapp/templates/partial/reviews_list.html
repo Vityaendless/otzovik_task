@@ -26,6 +26,13 @@
                     </a>
                 </p>
             {% endif %}
+            {% if link_to_product  %}
+                <p>
+                    <a href="{% url 'webapp:product_view' pk=review.product.pk %}" class="link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
+                        Go to product
+                    </a>
+                </p>
+            {% endif %}
         </li>
     {% endfor %}
 </ul>
