@@ -12,7 +12,7 @@
         <div class="card-body">
             <h5 class="card-title">{{ product.title }}</h5>
             <p class="card-text">{{ product.description }}</p>
-            <p class="card-text">{{ product.category }}</p>
+            <p class="card-text">{{ product.get_category_display }}</p>
             <div class="rating-result">
                 {% for star in stars %}
                     <span {% if product.avg_grade >= forloop.counter %}class="active"{% endif %}></span>

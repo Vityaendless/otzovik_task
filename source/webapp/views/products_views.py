@@ -2,8 +2,9 @@ from django.views.generic import ListView, CreateView, DetailView, UpdateView, D
 from django.db.models import Q
 from django.utils.http import urlencode
 from django.urls import reverse_lazy
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.core.paginator import Paginator
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 from ..models import Product
 from ..forms import SimpleSearchForm, ProductForm
@@ -49,10 +50,14 @@ class IndexView(ListView):
         return context
 
 
-class ProductCreateView(CreateView):
+class ProductCreateView(PermissionRequiredMixin, CreateView):
     template_name = 'products/product_create.html'
     model = Product
     form_class = ProductForm
+    permission_required = 'webapp.add_product'
+
+    def handle_no_permission(self):
+        return redirect('webapp:403')
 
 
 class ProductView(DetailView):
